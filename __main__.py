@@ -8,13 +8,16 @@ import dictionary
 
 cfg_file = 'config.ini'
 
+# Open users file with configparser
 users_file = 'users.ini'
 users = configparser.RawConfigParser()
 users.read(users_file)
 
+# Create mailer instance
 m = mailer.Mailer()
 m.config(cfg_file)
 
+# Create dictionary instance
 d = dictionary.dct(cfg_file)
 
 
@@ -27,6 +30,10 @@ for user in users.sections():
     lang = users.get(user, 'lang')
     step = int(users.get(user, 'step'))
     cursor = int(users.get(user, 'cursor'))
+    
+    # Update cursor for user
+    users.set(user, 'cursor', cursor + step )
+    users.write(open(users_file, 'w+'))
     
 
     # GET WORDS
