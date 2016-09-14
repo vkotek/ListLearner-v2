@@ -1,6 +1,5 @@
 import requests
 
-cfg_file = "config.ini"
 
 class Mailer(object):
 
@@ -25,6 +24,7 @@ class Mailer(object):
                 "subject": self.mg_sub,
                 "text": body})
 
-m = Mailer()
-m.config(cfg_file)
-m.send_message(["kotek.vojtech@gmail.com"],"Hello. this is a test")
+
+#m = Mailer()
+#m.config(cfg_file)
+#m.send_message(["kotek.vojtech@gmail.com"],"Hello. this is a test")
