@@ -4,6 +4,7 @@
 
 import configparser
 import mailer
+import dictionary
 
 
 users_file = 'users.ini'
@@ -17,13 +18,26 @@ for user in users.sections():
     username = users.get(user, 'username')
     email = users.get(user, 'email')
     lang = users.get(user, 'lang')
-    step = users.get(user, 'step')
-    cursor = users.get(user, 'cursor')
+    step = int(users.get(user, 'step'))
+    cursor = int(users.get(user, 'cursor'))
     
 
     # GET WORDS
-    
+    lang_file = lang + ".txt"
+    with open(lang_file, 'r') as f:
+        words = [line.rstrip('\n') for line in f]
+        words = words[ cursor : cursor+step ]
+        f.close()
+    print(words)
 
     # GET DEFINITIONS
+    d = dictionary.connect(lang)
+    for word in words:
+        df = d.get(word)
+        body[word] = df
+    
+    print(body)
+        
+    
 
     # EMAIL IT
