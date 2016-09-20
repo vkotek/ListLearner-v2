@@ -7,7 +7,7 @@ class dct(object):
         self.config = configparser.RawConfigParser()
         self.config.read(cfg_file)
         self.cfg_url = self.config.get('yandex','url')
-        self.cfg_key = self.config.get('yandex','key')
+        self.cfg_key = self.config.get('yandex','api_key')
 
     def get(self, word, lang):
         url = self.cfg_url.format(self.cfg_key, lang, word)
