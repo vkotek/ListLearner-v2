@@ -4,7 +4,7 @@ import requests
 class Mailer(object):
 
     # Get mailgun config from file
-    def config(self, cfg_file):
+    def __init__(self, cfg_file):
         import configparser
         cfg = configparser.RawConfigParser()
         cfg.read(cfg_file)
@@ -22,9 +22,8 @@ class Mailer(object):
                 "from": self.mg_from,
                 "to": to,
                 "subject": self.mg_sub,
-                "text": body})
+                "html": body})
 
-
-#m = Mailer()
-#m.config(cfg_file)
-#m.send_message(["kotek.vojtech@gmail.com"],"Hello. this is a test")
+if __name__ == "__main__":
+    m = Mailer("config.ini")
+    print(m.send_message(["kotek.vojtech@gmail.com"],"Hello. this is a test"))

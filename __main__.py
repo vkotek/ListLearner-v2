@@ -14,8 +14,7 @@ users = configparser.RawConfigParser()
 users.read(users_file)
 
 # Create mailer instance
-m = mailer.Mailer()
-m.config(cfg_file)
+m = mailer.Mailer(cfg_file)
 
 # Create dictionary instance
 d = dictionary.dct(cfg_file)
@@ -37,7 +36,7 @@ for user in users.sections():
     
 
     # GET WORDS
-    lang_file = lang + ".txt"
+    lang_file = "lists/" + lang + ".txt"
     with open(lang_file, 'r') as f:
         words = [line.rstrip('\n') for line in f]
         words = words[ cursor : cursor+step ]
@@ -45,11 +44,29 @@ for user in users.sections():
     print(words)
 
     # GET DEFINITIONS
-    #d = dictionary.connect(lang)
-    body = {}
+    body = []
     for word in words:
-        #df = d.get(word)
-        body[word] = d.get(word, lang)
+        a = ""
+        df = d.get(word ,lang + "-en")
+        for f in df:
+            for t in f['tr']:
+                a += "<br><b>%s</b> - <i>%s</i><br>" % (t['text'],t['pos'])
+                try:
+                    if len(t['ex'])>0:
+                        a += "<h5>EXAMPLES:</h5><ul>"
+                    for ex in t['ex']:
+                        a += "<li><b>%s</b>:  <i>%s</i></li>" % (ex['text'],ex['tr'][0]['text'])
+                    a += "</ul>"
+                except:
+                    continue
+
+        line = "<h2>%s</h2><br>%s<hr>" % (word,"".join(a))
+        body.append(line)
+
+    # Join all words and defs into mail body
+    body = "".join(body)
+    body += "<br><br><a href=\"https://tech.yandex.com/dictionary/\">Powered by Yandex.Dictionary</a>"
+
     
     print(body)
 
