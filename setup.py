@@ -18,21 +18,23 @@ def main():
     
     # Check if config file exists
     if os.path.isfile(cfg_file):
-        # Have users? list users, else make user
-        users = configparser.RawConfigParser()
-        users.read(cfg_file)
+        # Parse config file
+        cfg = configparser.RawConfigParser()
+        cfg.read(cfg_file)
     else: # if config not found, ask to create it
         if not ( ask_y("Config file not found. Create new? ") ):
             exit("Bye!")
         config_setup() # New conig file setup
 
+    
     # USERS
     
     # Check if users file exists
+    users = configparser.RawConfigParser()
+    users.read(usrs_file)
+    
     if os.path.isfile(usrs_file):
-        users = configparser.RawConfigParser()
-        users.read(usrs_file)
-        # If there are users, list them
+        # Try to list users
         if users.sections():
             print("ID\tUsername")
             [ print(user+"\t"+users.get(user, 'username')) for user in users.sections() ]
@@ -79,15 +81,6 @@ def config_setup():
         config.write(f)
         print("Config file created.")
         
-
-"""
-try:
-    with open(cfg_file) as f:
-        configparser.RawConfigParser()
-        
-except:
-    print("not found")  
-"""
 
 if __name__ == "__main__":
     main()
